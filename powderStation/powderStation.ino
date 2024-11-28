@@ -2,6 +2,11 @@
 #include <Wire.h>
 #include <SHT31.h>
 #include <rgb_lcd.h>
+#include <ESP8266WiFi.h> //Library for all WiFi related functionalities
+#include <WiFiClient.h> //Send requests to web browser
+#include <ESP8266WebServer.h> //Handles all HTTP protocols
+
+#include "website/index.html"
 
 #define minTemp4Powder -15
 #define maxTemp4Powder -5
@@ -10,6 +15,36 @@
 
 constant int buttonPin = 13;
 int buttonState = 0;
+
+// Network credentials
+const char* ssid     = "devolo-278";
+const char* password = "VBQCROOVXZYVUHMR";
+
+// Set web server port number to 80
+WiFiServer server(80);
+
+// Variable to store the HTTP request
+String header;
+
+void handleRoot() {
+ String s = MAIN_page; //Read HTML contents
+ server.send(200, "text/html", s); //Send web page
+}
+
+// Auxiliar variables to store the current output state
+String output5State = "off";
+String output4State = "off";
+
+// Assign output variables to GPIO pins
+const int output5 = 5;
+const int output4 = 4;
+
+// Current time
+unsigned long currentTime = millis();
+// Previous time
+unsigned long previousTime = 0; 
+// Define timeout time in milliseconds (example: 2000ms = 2s)
+const long timeoutTime = 2000;
 
 class MySensor : public SHT31{
   public:
@@ -64,8 +99,34 @@ void setup() {
   //Initialze sensor and start screens
   sensor.begin();
   screen.init();
+
+  Serial.begin(9600);
+
+  // Connect to Wi-Fi network with SSID and password
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password); //Connect to WiFi router
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  // Print local IP address and start web server
+  Serial.println("");
+  Serial.println("WiFi connected.");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+  server.begin();
+
+  server.on("/", handleRoot);      //Which routine to handle at root location
+
+  server.begin();                  //Start server
+  Serial.println("HTTP server started");
 }
 
 void loop() {
   sensor.showConditons(screen);
+
+  WiFiClient client = server.available();   // Listen for incoming clients
+
+  server.handleClient();
 }
