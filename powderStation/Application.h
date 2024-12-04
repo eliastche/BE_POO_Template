@@ -6,32 +6,70 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
+//Include necessary libraires for external sensor/ screens
+#include "Arduino.h"
+#include "Wire.h"
+#include "SHT31.h"
+#include "rgb_lcd.h"
+
+
+//States for display of informations in the weather station
+#define showTemp 0
+#define showHum 1
+#define showLight 2
+#define showClock 3
+
+enum condition{
+    minTemp: int;
+    maxTemp: int;
+
+    minHum: int;
+    maxTemp: hum;
+}
+
 /**
   * @class Application
   * @brief Classe Application 
 */    
-class Application
-{
-  public :
-    /**
-     * @fn Application();
-     * @brief Constructeur par defaut
-    */    
-    Application();
-    /**
-     * @fn Application();
-     * @brief Destructeur
-    */    
-    ~Application();    
-    /**
-     * @fn void init(void)
-     * @brief Fonction d'initialisation de l'application
-    */
-    void init(void);
-    /**
-     * @fn void run(void)
-     * @brief Fonction de lancement de l'application
-    */
-    void run(void);
-};
+class WeatherStation{
+  public:
+    Weatherstation(void);
+
+    //Update attributes
+    void changeState(void);
+    void setButtonSate(void);
+    void updateConditionds(void);
+
+    //Fetch attributes
+    int getState(void);
+    int getButtonState(void);
+    int getOldbuttonState(void);
+
+    //Other methods
+    void showConditions(void);
+
+  protected:
+    int state;
+    lcd_rgb screen;
+    SHT31 tempHumSensor;
+    int lightSensorPin;
+    int buttonPin;
+    int buttonState;
+    int oldButtonState;
+
+  private:
+
+}
+
+class PowderStaition : public WeatherStation{
+  public:
+    Boolean goodConditions;
+    condition;
+    
+  protected:
+
+  private:
+
+}
+
 #endif
