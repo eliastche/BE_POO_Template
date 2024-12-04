@@ -44,25 +44,26 @@ class Button{
     Button(void);
     Button(int pin);
     
-    //Get attributes
+    //Get attributes (Getters)
     int getState(void);
+    int getOldState(void);
     int getPin(void);
 
-    //Set attributes
-    void changeState(void);
+    //Set attributes (Setters)
+    void changeState(int state);
     void changePin(int pin);
-    void updateOldState(void);
+    void updateOldState(int oldState);
 
   private:
     //Attributes
     int state;
     int pin;
     int oldState;
-}
+};
 
 class WeatherStation{
   public:
-    Weatherstation(void);
+    WeatherStation(void);
     WeatherStation(int lightPin, Button butt, String location);
 
     //Update attributes
@@ -74,13 +75,16 @@ class WeatherStation{
     int readTemp(void);
     int readHum(void);
 
+    //Set attributs
+    void setRGB(int red, int green, int blue);
+
     //Other methods
     void showConditions(void);
     void start(void);
 
   protected:
     //Attributes
-    lcd_rgb screen;
+    rgb_lcd screen;
     SHT31 tempHumSensor;
     int state;
     int lightSensorPin;
@@ -91,7 +95,7 @@ class WeatherStation{
     int light;
     int temp;
     int hum;
-}
+};
 
 class PowderStation : public WeatherStation{
   public:
@@ -100,13 +104,13 @@ class PowderStation : public WeatherStation{
     PowderStation(int lightPin, Button butt, String location);
     
     void start(void);
-    Boolean goodConditions(void);
+    boolean goodConditions(void);
     
   protected:
 
   private:
 
-}
+};
 
 const char MAIN_page[] PROGMEM = R"=====(
 <html>

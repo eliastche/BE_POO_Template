@@ -3,7 +3,7 @@
  * @author Haakon Bogen & Elias Tche
  * @brief Fichier source de l'application
  *********************************************************************/
-#include <Application.h>
+#include "Application.h"
 
 //Values for optimal powder conditions
 #define minTemp4Powder -15
@@ -31,22 +31,22 @@ Button:: Button(int pin){
 int Button:: getState(){
     return state;
 }
-int Button:: oldState(){
-    return oldState
+int Button:: getOldState(){
+    return oldState;
 }
 int Button:: getPin(){
     return pin;
 }
 
 //Set attributes
-void Button:: setState(int new){
-    state = new;
+void Button:: changeState(int newSet){
+    state = newSet;
 }
-void Button:: setOldState(int new){
-    oldState = new;
+void Button:: updateOldState(int newSet){
+    oldState = newSet;
 }
-void Button:: changePin(int new){
-    pin = new;
+void Button:: changePin(int newSet){
+    pin = newSet;
 }
 
 //******************************************************************************************************
@@ -54,15 +54,14 @@ void Button:: changePin(int new){
 //******************************************************************************************************
 
 //Constructors
-WeatherStation:: WeatherStation(){
+WeatherStation:: WeatherStation() : button(13) {
     screen.begin(16, 2);
     tempHumSensor = SHT31();
     state = showTemp;
     location = "Toulouse";
     lightSensorPin = 12;
-    button = new Button(13);
 }
-WeatherSation:: WeatherStation(int lightPin, Button butt, String location){
+WeatherStation:: WeatherStation(int lightPin, Button butt, String location){
     screen.begin(16, 2);
     tempHumSensor = SHT31();
     button = butt;
