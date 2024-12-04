@@ -6,7 +6,7 @@
 #include <WiFiClient.h> //Send requests to web browser
 #include <ESP8266WebServer.h> //Handles all HTTP protocols
 
-#include "website/index.html"
+#include "Application.h"
 
 //Pins
 #define buttonPIN 13//D7
@@ -17,6 +17,20 @@
 #define showHum 1
 #define showLight 2
 #define showClock 3
+
+//Wifi credentials
+//Elias's HotSpot
+//#define STASSID " Tche "
+//#define STAPSK "Elias123"
+//Haakon's Wifi
+//#define STASSID "devolo-278";
+//#define STAPSK "VBQCROOVXZYVUHMR";
+//Haakon's HotSpot
+//#define STASSID "Halla man";
+//#define STAPSK "noe kult";
+//Max HotSpot
+#define STASSID "A Man"
+#define STAPSK "HASNONAME"
 
 //Values for optimal powder conditions
 #define minTemp4Powder -15
@@ -29,18 +43,20 @@ int oldButtonState = 0;
 int screenState = showTemp;
 
 // Network credentials
-const char* ssid     = "devolo-278";
-const char* password = "VBQCROOVXZYVUHMR";
+const char* ssid     = STASSID;
+const char* password = STAPSK;
 
 // Set web server port number to 80
-WiFiServer server(80);
+ESP8266WebServer server(80);
 
 // Variable to store the HTTP request
 String header;
 
 void handleRoot() {
- String s = MAIN_page; //Read HTML contents
- server.send(200, "text/html", s); //Send web page
+
+  String s = MAIN_page;
+
+  server.send(200, "text/html", s); //Send web page
 }
 
 // Auxiliar variables to store the current output state
@@ -151,13 +167,8 @@ int temp;
 int hum;
 int light;
 void loop() {
-<<<<<<< HEAD
-  sensor.showConditons(screen);
-
-  WiFiClient client = server.available();   // Listen for incoming clients
-
   server.handleClient();
-=======
+
   buttonState = digitalRead(buttonPIN);
 
   switch (screen.getState()){
@@ -214,5 +225,4 @@ void loop() {
     screen.clear();
   }
   oldButtonState = buttonState;
->>>>>>> 142bcf4c4bb4554d9dddf7f1b602efffea4c6d17
 }
