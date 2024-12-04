@@ -6,12 +6,24 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
-//Include necessary libraires for external sensor/ screens
-#include "Arduino.h"
-#include "Wire.h"
-#include "SHT31.h"
-#include "rgb_lcd.h"
+#include <String.h>
 
+//Include necessary libraires for external sensor/ screens
+#include <Arduino.h>
+#include <Wire.h>
+#include <SHT31.h>
+#include <rgb_lcd.h>
+
+
+//Colors
+#define weatherRed 75
+#define weatherGreen 200
+#define weatherBlue 200
+
+
+#define powderRed 50
+#define powderGreen 100
+#define powderBlue 255
 
 //States for display of informations in the weather station
 #define showTemp 0
@@ -19,57 +31,80 @@
 #define showLight 2
 #define showClock 3
 
-enum condition{
-    minTemp: int;
-    maxTemp: int;
-
-    minHum: int;
-    maxTemp: hum;
-}
-
 /**
   * @class Application
   * @brief Classe Application 
-*/    
+*/
+
+class Button{
+  public:
+    //Methods
+
+    //Constructors
+    Button(void);
+    Button(int pin);
+    
+    //Get attributes
+    int getState(void);
+    int getPin(void);
+
+    //Set attributes
+    void changeState(void);
+    void changePin(int pin);
+    void updateOldState(void);
+
+  private:
+    //Attributes
+    int state;
+    int pin;
+    int oldState;
+}
+
 class WeatherStation{
   public:
     Weatherstation(void);
+    WeatherStation(int lightPin, Button butt, String location);
 
     //Update attributes
     void changeState(void);
-    void setButtonSate(void);
-    void updateConditionds(void);
+    void updateConditions(void);
 
     //Fetch attributes
-    int getState(void);
-    int getButtonState(void);
-    int getOldbuttonState(void);
+    int readLight(void);
+    int readTemp(void);
+    int readHum(void);
 
     //Other methods
     void showConditions(void);
+    void start(void);
 
   protected:
-    int state;
+    //Attributes
     lcd_rgb screen;
     SHT31 tempHumSensor;
+    int state;
     int lightSensorPin;
-    int buttonPin;
-    int buttonState;
-    int oldButtonState;
+    Button button;
+    String location;
 
-  private:
-
+    //Condtions
+    int light;
+    int temp;
+    int hum;
 }
 
-class PowderStaition : public WeatherStation{
+class PowderStation : public WeatherStation{
   public:
-    Boolean goodConditions;
-    condition;
+    //Constructor
+    PowderStation(void);
+    PowderStation(int lightPin, Button butt, String location);
+    
+    void start(void);
+    Boolean goodConditions(void);
     
   protected:
 
   private:
 
 }
-
 #endif
