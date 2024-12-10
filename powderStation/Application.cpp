@@ -68,6 +68,8 @@ WeatherStation:: WeatherStation() : button(13) {
     state = SHOWTEMP;
     location = "Toulouse";
     lightSensorPin = 12;
+    curr_time = time(NULL);
+    
 }
 WeatherStation:: WeatherStation(int lightPin, Button butt, String location){
     screen.begin(16, 2);
@@ -78,6 +80,66 @@ WeatherStation:: WeatherStation(int lightPin, Button butt, String location){
     this->location = location;
 }
 
+
+//Fetch attributes
+int WeatherStation:: readLight(){
+    return light;
+}
+int WeatherStation:: readTemp(){
+    return temp;
+}
+int WeatherStation:: readHum(){
+    return hum;
+}
+String WeatherStation:: readTime(){
+  return (String)tm_local->tm_hour+ ":" + (String)tm_local->tm_min + ":" + (String)tm_local->tm_sec;
+}
+
+//Set attributes
+void WeatherStation:: changeState(){
+    if(state < SHOWCLOCK){
+       state++;
+    }
+    else{
+      state = SHOWTEMP;
+    }
+    screen.clear();
+}
+void WeatherStation:: updateConditions(){
+    light = digitalRead(lightSensorPin);
+    temp = tempHumSensor.getTemperature();
+    hum = tempHumSensor.getHumidity();
+    tm *tm_local = localtime(&curr_time);
+}
+//Other methods
+void WeatherStation:: showConditions(){
+    screen.setCursor(0,0);
+    updateConditions();
+
+    switch (state){
+        case SHOWTEMP:
+            screen.print("Temp: ");
+            screen.print(temp);
+            break;
+        case SHOWHUM:
+            screen.print("Hum: ");
+            screen.print(hum);
+            break;
+        case SHOWLIGHT:
+            screen.print("Light: ");
+            screen.print(light);
+            break;
+        case SHOWCLOCK:
+            screen.print("Time:" );
+            //screen.print((String)tm_local->tm_hour);
+            screen.print(":");
+            //screen.print((String)tm_local->tm_min);
+            screen.print(":");
+            //screen.print((String)tm_local->tm_sec);
+            break;
+    }
+
+}
 void WeatherStation:: start(){
     //Initalize lightsensorpin and temperature and humidity sensor
     pinMode(lightSensorPin, INPUT);
@@ -106,7 +168,6 @@ void WeatherStation:: start(){
     
     screen.clear();
 }
-
 void WeatherStation:: waitForNetwork(){
   screen.setCursor(0,0);
   screen.print("Waiting for");
@@ -117,67 +178,22 @@ void WeatherStation:: clearScreen(){
   screen.clear();
 }
 
-//Fetch attributes
-int WeatherStation:: readLight(){
-    return light;
-}
-int WeatherStation:: readTemp(){
-    return temp;
-}
-int WeatherStation:: readHum(){
-    return hum;
-}
-
-//Set attributes
-void WeatherStation:: changeState(){
-    if(state < SHOWCLOCK){
-       state++;
-    }
-    else{
-      state = SHOWTEMP;
-    }
-    screen.clear();
-}
-void WeatherStation:: updateConditions(){
-    light = digitalRead(lightSensorPin);
-    temp = tempHumSensor.getTemperature();
-    hum = tempHumSensor.getHumidity();
-}
-
-//Print
-void WeatherStation:: showConditions(){
-    screen.setCursor(0,0);
-    updateConditions();
-
-    switch (state){
-        case SHOWTEMP:
-            screen.print("Temp: ");
-            screen.print(temp);
-            break;
-        case SHOWHUM:
-            screen.print("Hum: ");
-            screen.print(hum);
-            break;
-        case SHOWLIGHT:
-            screen.print("Light: ");
-            screen.print(light);
-            break;
-        case SHOWCLOCK:
-            screen.print("Time is now");
-            break;
-    }
-
-}
-
 //******************************************************************************************************
 //Functions for PowderStation
 //******************************************************************************************************
 
 //Constructors
 //The constructors for PowderStation works the same as the constructors for a WeatherStation
-PowderStation:: PowderStation():WeatherStation(){}
-PowderStation:: PowderStation(int lightPin, Button butt, String location): WeatherStation(lightPin, butt, location){}
+PowderStation:: PowderStation():WeatherStation(){
+  condTemp = {-15, -5};
+  condHum = {20, 60};
+}
+PowderStation:: PowderStation(int lightPin, Button butt, String location): WeatherStation(lightPin, butt, location){
+  condTemp = {-15, -5};
+  condHum = {20, 60};
+}
 
+//Start function for powderStation
 void PowderStation:: start(){
     //Initalize lightsensorpin
     pinMode(lightSensorPin, INPUT);
@@ -205,4 +221,12 @@ void PowderStation:: start(){
     }
     
     screen.clear();
+}
+
+// Functions for right weather conditions
+boolean PowderStation:: goodTemp(){
+  return this->temp >= condTemp.min && this->temp <= condTemp.max;
+}
+boolean PowderStation:: goodHum(){
+  return this->hum >= condHum.min && this->hum <= condHum.max;
 }

@@ -6,14 +6,15 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
-#include <String.h>
-
 //Include necessary libraires for external sensor/ screens
 #include <Arduino.h>
 #include <Wire.h>
 #include <SHT31.h>
 #include <rgb_lcd.h>
 
+// Include libraries for other functionalities
+#include <String>
+#include <ctime>
 
 //Colours
 #define weatherRed 75
@@ -30,15 +31,15 @@
 #define SHOWLIGHT 2
 #define SHOWCLOCK 3
 
-/**
-  * @class Application
-  * @brief Classe Application 
-*/
-
 typedef struct condtion{
   int max;
   int min;
 } cond;
+
+/**
+  * @class Button
+  * @brief Button making it possible to change between what the screen shows 
+*/
 
 class Button{
   public:
@@ -65,6 +66,11 @@ class Button{
     int oldState;
 };
 
+/**
+  * @class WeatherStation
+  * @brief Overclass containing methods to show weatherconditions and local time 
+*/
+
 class WeatherStation{
   public:
     //Public attributes
@@ -81,6 +87,7 @@ class WeatherStation{
     int readLight(void);
     int readTemp(void);
     int readHum(void);
+    String readTime(void);
 
     //Set attributs
     void setRGB(int red, int green, int blue);
@@ -98,12 +105,19 @@ class WeatherStation{
     int state;
     int lightSensorPin;
     String location;
+    time_t curr_time;
+    tm *tm_local;
 
-    //Condtions
+    //Weather conditions
     int light;
     int temp;
     int hum;
 };
+
+/**
+  * @class PowderStation
+  * @brief herited class of a weatherConditions containing weatherconditions
+*/
 
 class PowderStation : public WeatherStation{
   public:
@@ -111,11 +125,15 @@ class PowderStation : public WeatherStation{
     PowderStation(void);
     PowderStation(int lightPin, Button butt, String location);
     
+    // Methods
     void start(void);
-    boolean goodConditions(void);
-    
+    boolean goodTemp(void);
+    boolean goodHum(void);
+
   protected:
-    
+    // Attributs
+    cond condTemp;
+    cond condHum; 
 
   private:
 
