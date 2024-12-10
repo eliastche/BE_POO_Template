@@ -15,11 +15,10 @@
 #include <rgb_lcd.h>
 
 
-//Colors
+//Colours
 #define weatherRed 75
 #define weatherGreen 200
 #define weatherBlue 200
-
 
 #define powderRed 50
 #define powderGreen 100
@@ -84,6 +83,8 @@ class WeatherStation{
     //Other methods
     void showConditions(void);
     void start(void);
+    void waitForNetwork(void);
+    void clearScreen(void);
 
   protected:
     //Attributes
