@@ -25,6 +25,12 @@
 #define powderGreen 100
 #define powderBlue 255
 
+// Define constants for optimal weather conditons
+#define MIN_TEMP_POWDER -15
+#define MAX_TEMP_POWDER -5
+#define MIN_HUM_POWDER 20
+#define MAX_HUM_POWDER 60
+
 //States for display of informations in the weather station
 #define SHOWTEMP 0
 #define SHOWHUM 1
@@ -97,7 +103,6 @@ class WeatherStation{
     void start(void);
     void waitForNetwork(void);
     void clearScreen(void);
-
   protected:
     //Attributes
     rgb_lcd screen;
@@ -127,13 +132,13 @@ class PowderStation : public WeatherStation{
     
     // Methods
     void start(void);
-    boolean goodTemp(void);
-    boolean goodHum(void);
+    void showConditions(void);
+    int goodTemp(void);
+    int goodHum(void);
+    int checkCond(void);
 
   protected:
     // Attributs
-    cond condTemp;
-    cond condHum; 
 
   private:
 

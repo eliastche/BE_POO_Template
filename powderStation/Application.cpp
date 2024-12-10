@@ -5,12 +5,6 @@
  *********************************************************************/
 #include "Application.h"
 
-//Values for optimal powder conditions
-#define minTemp4Powder -15
-#define maxTemp4Powder -5
-#define minHum4Powder 20
-#define maxHum4powder 60
-
 //******************************************************************************************************
 //Functions for button
 //******************************************************************************************************
@@ -184,14 +178,8 @@ void WeatherStation:: clearScreen(){
 
 //Constructors
 //The constructors for PowderStation works the same as the constructors for a WeatherStation
-PowderStation:: PowderStation():WeatherStation(){
-  condTemp = {-15, -5};
-  condHum = {20, 60};
-}
-PowderStation:: PowderStation(int lightPin, Button butt, String location): WeatherStation(lightPin, butt, location){
-  condTemp = {-15, -5};
-  condHum = {20, 60};
-}
+PowderStation:: PowderStation():WeatherStation(){}
+PowderStation:: PowderStation(int lightPin, Button butt, String location): WeatherStation(lightPin, butt, location){}
 
 //Start function for powderStation
 void PowderStation:: start(){
@@ -223,10 +211,25 @@ void PowderStation:: start(){
     screen.clear();
 }
 
-// Functions for right weather conditions
-boolean PowderStation:: goodTemp(){
-  return this->temp >= condTemp.min && this->temp <= condTemp.max;
+//Show conditions for powderStation
+void PowderStation:: showConditions(){
+  if(checkCond()){
+    screen.setCursor(0,0);
+    screen.print("Go shred dude!!!");
+  }
+  else{
+    WeatherStation :: showConditions();
+  }
 }
-boolean PowderStation:: goodHum(){
-  return this->hum >= condHum.min && this->hum <= condHum.max;
+
+// Functions for right weather conditions
+int PowderStation:: goodTemp(){
+  return this->temp >= MIN_TEMP_POWDER && this->temp <= MAX_TEMP_POWDER;
+}
+int PowderStation:: goodHum(){
+  return this->hum >= MIN_HUM_POWDER && this->hum <= MAX_HUM_POWDER;
+}
+
+int PowderStation:: checkCond(){
+  return this->goodTemp() && this->goodHum();
 }

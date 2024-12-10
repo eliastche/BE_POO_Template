@@ -17,11 +17,11 @@
 // #define STASSID "Tche"
 // #define STAPSK "Elias123"
 //Haakon's Wifi
-//#define STASSID "devolo-278";
-//#define STAPSK "VBQCROOVXZYVUHMR";
+#define STASSID "devolo-278";
+#define STAPSK "VBQCROOVXZYVUHMR";
 //Haakon's HotSpot
-#define STASSID "Halla man";
-#define STAPSK "noe kult";
+// #define STASSID "Halla man";
+// #define STAPSK "noe kult";
 //Max HotSpot
 // #define STASSID "A Man"
 // #define STAPSK "HASNONAME"
@@ -72,12 +72,6 @@ unsigned long currentTime = millis();
 unsigned long previousTime = 0; 
 // Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
-
-<<<<<<< HEAD
-=======
-// Create powderstation
-PowderStation thisStation;// = new PowderStation();
->>>>>>> f21c638d3950e6fea2a01f068890d081156e8294
 
 void setup() {
   // Connect to network
