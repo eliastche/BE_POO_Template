@@ -37,6 +37,11 @@
 #define SHOWLIGHT 2
 #define SHOWCLOCK 3
 
+typedef struct treshold{
+  int min; 
+  int max;
+} limit;
+
 /**
   * @class Button
   * @brief Button making it possible to change between what the screen shows 
@@ -134,7 +139,8 @@ class PowderStation : public WeatherStation{
 
   protected:
     // Attributs
-
+    static limit condTemp;
+    static limit condHum;
   private:
 
 };

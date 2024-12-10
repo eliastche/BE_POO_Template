@@ -184,6 +184,10 @@ void WeatherStation:: clearScreen(){
 //Functions for PowderStation
 //******************************************************************************************************
 
+// Treshold values for powderStation
+limit PowderStation:: condTemp = {MIN_TEMP_POWDER, MAX_TEMP_POWDER};
+limit PowderStation:: condHum = {MIN_HUM_POWDER, MAX_HUM_POWDER};
+
 //Constructors
 //The constructors for PowderStation works the same as the constructors for a WeatherStation
 PowderStation:: PowderStation():WeatherStation(){}
@@ -235,10 +239,10 @@ void PowderStation:: showConditions(){
 
 // Functions for right weather conditions
 int PowderStation:: goodTemp(){
-  return this->temp >= MIN_TEMP_POWDER && this->temp <= MAX_TEMP_POWDER;
+  return this->temp >= condTemp.min && this->temp <= condTemp.max;
 }
 int PowderStation:: goodHum(){
-  return this->hum >= MIN_HUM_POWDER && this->hum <= MAX_HUM_POWDER;
+  return this->hum >= condHum.min && this->hum <= condHum.max;
 }
 //Checks both goodHum and goodTemp
 int PowderStation:: checkCond(){
