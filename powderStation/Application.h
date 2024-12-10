@@ -35,6 +35,11 @@
   * @brief Classe Application 
 */
 
+typedef struct condtion{
+  int max;
+  int min;
+} cond;
+
 class Button{
   public:
     //Methods
@@ -110,6 +115,7 @@ class PowderStation : public WeatherStation{
     boolean goodConditions(void);
     
   protected:
+    
 
   private:
 

@@ -43,7 +43,6 @@ ESP8266WebServer server(80);
 String header;
 
 void handleRoot() {
-
   String s = MAIN_page;
 
   server.send(200, "text/html", s); //Send web page
@@ -64,7 +63,7 @@ unsigned long previousTime = 0;
 // Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
 
-//Initialiser notre powderStation
+// Create powderstation
 PowderStation thisStation;// = new PowderStation();
 
 void setup() {
@@ -99,23 +98,21 @@ void setup() {
   //Start the station
   thisStation.start();
 }
-int temp;
-int hum;
-int light;
+
 void loop() {
   server.handleClient();
 
-  // Afficher les condtions 
+  // Print temp and humidity 
   thisStation.showConditions();
 
-  //Mettre à jour le bouton
+  // Update button
   thisStation.button.updateState(digitalRead(BUTTONPIN));
 
-  //Mettre à jour l'état de la station
+  // Check and update of state of station
   if(thisStation.button.getOldState() != thisStation.button.getState() && thisStation.button.getState() == HIGH){
     thisStation.changeState();
   }
 
-  //Mettre à jour le bouton
+  // Update button
   thisStation.button.updateOldState();
 }
