@@ -5,12 +5,6 @@
  *********************************************************************/
 #include "Application.h"
 
-//Values for optimal powder conditions
-#define minTemp4Powder -15
-#define maxTemp4Powder -5
-#define minHum4Powder 20
-#define maxHum4powder 60
-
 //******************************************************************************************************
 //Functions for button
 //******************************************************************************************************
@@ -97,13 +91,16 @@ String WeatherStation:: readTime(){
 
 //Set attributes
 void WeatherStation:: changeState(){
-    if(state < SHOWCLOCK){
-       state++;
-    }
-    else{
-      state = SHOWTEMP;
-    }
-    screen.clear();
+  // Move to nexte state
+  if(state < SHOWCLOCK){
+      state++;
+  }
+  // Putting station back to show the temperature, putting it in a loop
+  else{
+    state = SHOWTEMP;
+  }
+  // Clearing screen after switching state
+  screen.clear();
 }
 void WeatherStation:: updateConditions(){
     light = digitalRead(lightSensorPin);
@@ -113,9 +110,11 @@ void WeatherStation:: updateConditions(){
 }
 //Other methods
 void WeatherStation:: showConditions(){
+    // Sets cursor to top left corner and updates the weather conditions
     screen.setCursor(0,0);
     updateConditions();
 
+    // Shows the condition dependeing on what 'state' the station is in
     switch (state){
         case SHOWTEMP:
             screen.print("Temp: ");
@@ -140,6 +139,7 @@ void WeatherStation:: showConditions(){
     }
 
 }
+// Start screen for user, presenting location and telling to press button to start
 void WeatherStation:: start(){
     //Initalize lightsensorpin and temperature and humidity sensor
     pinMode(lightSensorPin, INPUT);
@@ -166,8 +166,10 @@ void WeatherStation:: start(){
         button.updateState(digitalRead(button.getPin()));
     }
     
+    // Clear the screen for information to be shown
     screen.clear();
 }
+// Show the user that the station is waiting for the internet connection
 void WeatherStation:: waitForNetwork(){
   screen.setCursor(0,0);
   screen.print("Waiting for");
@@ -182,20 +184,18 @@ void WeatherStation:: clearScreen(){
 //Functions for PowderStation
 //******************************************************************************************************
 
+// Treshold values for powderStation
+limit PowderStation:: condTemp = {MIN_TEMP_POWDER, MAX_TEMP_POWDER};
+limit PowderStation:: condHum = {MIN_HUM_POWDER, MAX_HUM_POWDER};
+
 //Constructors
 //The constructors for PowderStation works the same as the constructors for a WeatherStation
-PowderStation:: PowderStation():WeatherStation(){
-  condTemp = {-15, -5};
-  condHum = {20, 60};
-}
-PowderStation:: PowderStation(int lightPin, Button butt, String location): WeatherStation(lightPin, butt, location){
-  condTemp = {-15, -5};
-  condHum = {20, 60};
-}
+PowderStation:: PowderStation():WeatherStation(){}
+PowderStation:: PowderStation(int lightPin, Button butt, String location): WeatherStation(lightPin, butt, location){}
 
-//Start function for powderStation
+//Start function for powderStationn showing a 'home' screen
 void PowderStation:: start(){
-    //Initalize lightsensorpin
+    //Initalize lightsensorpin and temperature & humidity sensor
     pinMode(lightSensorPin, INPUT);
     tempHumSensor.begin();
 
@@ -220,13 +220,31 @@ void PowderStation:: start(){
         button.updateState(digitalRead(button.getPin()));
     }
     
+    //clear screen for the next message to be shown
     screen.clear();
 }
 
+//Show conditions for powderStation
+void PowderStation:: showConditions(){
+  // If conditions are good, tells user that the condtions are good
+  if(checkCond()){
+    screen.setCursor(0,0);
+    screen.print("Go shred dude!!!");
+  }
+  // if not the program shows the different weather conditions
+  else{
+    WeatherStation :: showConditions();
+  }
+}
+
 // Functions for right weather conditions
-boolean PowderStation:: goodTemp(){
+int PowderStation:: goodTemp(){
   return this->temp >= condTemp.min && this->temp <= condTemp.max;
 }
-boolean PowderStation:: goodHum(){
+int PowderStation:: goodHum(){
   return this->hum >= condHum.min && this->hum <= condHum.max;
+}
+//Checks both goodHum and goodTemp
+int PowderStation:: checkCond(){
+  return this->goodTemp() && this->goodHum();
 }

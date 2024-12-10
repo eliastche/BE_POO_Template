@@ -6,13 +6,14 @@
 #include <WiFiClient.h> //Send requests to web browser
 #include <ESP8266WebServer.h> //Handles all HTTP protocols
 
+// Header to including all necessary functions
 #include "Application.h"
 
 //Pins
 #define BUTTONPIN 13// sur la carte: D7
 #define LIGHTSENSORPIN 12// sur la carte : D6
 
-//Wifi credentials
+//Wifi credentials used during testing
 //Elias's HotSpot
 // #define STASSID "Tche"
 // #define STAPSK "Elias123"
@@ -28,12 +29,6 @@
 //Marthe HotSpot
 // #define STASSID "iPhone de Marthe C"
 // #define STAPSK "marthe31"
-
-//Values for optimal powder conditions
-#define minTemp4Powder -15
-#define maxTemp4Powder -5
-#define minHum4Powder 20
-#define maxHum4Powder 60
 
 // Network credentials
 const char* ssid     = STASSID;
@@ -82,7 +77,6 @@ unsigned long previousTime = 0;
 // Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
 
-
 void setup() {
   // Connect to network
   thisStation.waitForNetwork();
@@ -113,24 +107,24 @@ void setup() {
   //clear screen
   thisStation.clearScreen();
 
-  //Start the station
+  //Showing start menu of the station
   thisStation.start();
 }
 
 void loop() {
   server.handleClient();
 
-  // Print temp and humidity 
+  // Print weather conditions
   thisStation.showConditions();
 
   // Update button
   thisStation.button.updateState(digitalRead(BUTTONPIN));
 
-  // Check and update of state of station
+  // Check if button is pressed(check if changes and new value is '1'), then changes the state of the stations
   if(thisStation.button.getOldState() != thisStation.button.getState() && thisStation.button.getState() == HIGH){
     thisStation.changeState();
   }
 
-  // Update button
+  // Update the 'old' button state
   thisStation.button.updateOldState();
 }
