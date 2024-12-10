@@ -49,7 +49,6 @@ String header;
 PowderStation thisStation;// = new PowderStation();
 
 void handleRoot() {
-
   String s = MAIN_page;
 
   // s.replace("{{TEMP}}", String(thisStation.readTemp()));
@@ -74,6 +73,11 @@ unsigned long previousTime = 0;
 // Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
 
+<<<<<<< HEAD
+=======
+// Create powderstation
+PowderStation thisStation;// = new PowderStation();
+>>>>>>> f21c638d3950e6fea2a01f068890d081156e8294
 
 void setup() {
   // Connect to network
@@ -107,23 +111,21 @@ void setup() {
   //Start the station
   thisStation.start();
 }
-int temp;
-int hum;
-int light;
+
 void loop() {
   server.handleClient();
 
-  // Afficher les condtions 
+  // Print temp and humidity 
   thisStation.showConditions();
 
-  //Mettre à jour le bouton
+  // Update button
   thisStation.button.updateState(digitalRead(BUTTONPIN));
 
-  //Mettre à jour l'état de la station
+  // Check and update of state of station
   if(thisStation.button.getOldState() != thisStation.button.getState() && thisStation.button.getState() == HIGH){
     thisStation.changeState();
   }
 
-  //Mettre à jour le bouton
+  // Update button
   thisStation.button.updateOldState();
 }
