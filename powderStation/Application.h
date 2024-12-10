@@ -1,7 +1,7 @@
 /*********************************************************************
- * @file  Apllication.h
+ * @file  Appication.h
  * @author Haakon Bogen & Elias Tche
- * @brief Fichier header de l'application
+ * @brief Header for the weatherstation program
  *********************************************************************/
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
@@ -36,11 +36,6 @@
 #define SHOWHUM 1
 #define SHOWLIGHT 2
 #define SHOWCLOCK 3
-
-typedef struct condtion{
-  int max;
-  int min;
-} cond;
 
 /**
   * @class Button
