@@ -17,14 +17,22 @@
 
 //Constructors
 Button:: Button(){
+    //Initialiser les valeurs
     this->pin = 13;
     this->state = 0;
     this->oldState = 0;
+
+    //Initialiser le pin
+    pinMode(this->pin, INPUT);
 }
 Button:: Button(int pin){
+    //Initialiser les valeurs
     this->pin = pin;
     this->state = 0;
     this->oldState = 0;
+
+    //Initialiser le pin
+    pinMode(this->pin, INPUT);
 }
 
 //Fetch attributes
@@ -39,11 +47,11 @@ int Button:: getPin(){
 }
 
 //Set attributes
-void Button:: changeState(int newSet){
+void Button:: updateState(int newSet){
     state = newSet;
 }
-void Button:: updateOldState(int newSet){
-    oldState = newSet;
+void Button:: updateOldState(){
+    oldState = state;
 }
 void Button:: changePin(int newSet){
     pin = newSet;
@@ -57,7 +65,7 @@ void Button:: changePin(int newSet){
 WeatherStation:: WeatherStation() : button(13) {
     screen.begin(16, 2);
     tempHumSensor = SHT31();
-    state = showTemp;
+    state = SHOWTEMP;
     location = "Toulouse";
     lightSensorPin = 12;
 }
@@ -65,34 +73,37 @@ WeatherStation:: WeatherStation(int lightPin, Button butt, String location){
     screen.begin(16, 2);
     tempHumSensor = SHT31();
     button = butt;
-    state = showtemp;
+    state = SHOWTEMP;
     lightSensorPin = lightPin;
     this->location = location;
 }
 
 void WeatherStation:: start(){
+    //Initalize lightsensorpin
+    pinMode(lightSensorPin, INPUT);
+
     //Set colour
-    setRGB(weatherRed,weatherGreen,weatherBlue);
+    screen.setRGB(weatherRed,weatherGreen,weatherBlue);
     
     //Print instructions
-    setCursor(0,0);
-    print(location);
-    setCursor(0,1);
-    print("Weather Station");
+    screen.setCursor(0,0);
+    screen.print(location);
+    screen.setCursor(0,1);
+    screen.print("Weather Station");
     delay(2000);
-    clear();
+    screen.clear();
 
-    setCursor(0,0);
-    print("Press button to");
-    setCursor(0,1);
-    print("start");
+    screen.setCursor(0,0);
+    screen.print("Press button to");
+    screen.setCursor(0,1);
+    screen.print("start");
     
     //Wait four user to press button
     while(button.getState() == 0){
-        button.setState(digitalRead(buttonPIN));
+        button.updateState(digitalRead(button.getPin()));
     }
     
-    clear();
+    screen.clear();
 }
 
 //Fetch attributes
@@ -108,35 +119,35 @@ int WeatherStation:: readHum(){
 
 //Set attributes
 void WeatherStation:: changeState(){
-    if(state < showClock) state++;
-    else state = showTemp;
+    if(state < SHOWCLOCK) state++;
+    else state = SHOWTEMP;
     screen.clear();
 }
-void WeatherStation:: updateConditionSs(){
-    light = readPin(lightSensorPin);
+void WeatherStation:: updateConditions(){
+    light = digitalRead(lightSensorPin);
     temp = (int)tempHumSensor.getTemperature();
     hum = (int)tempHumSensor.getHumidity();
 }
 
 //Print
-void WeatherStation:: showCondtions(){
-    screen.setSensor(0,0);
+void WeatherStation:: showConditions(){
+    screen.setCursor(0,0);
     updateConditions();
 
     switch (state){
-        case showTemp:
+        case SHOWTEMP:
             screen.print("Temp: ");
             screen.print(temp);
             break;
-        case showHum:
+        case SHOWHUM:
             screen.print("Hum: ");
             screen.print(hum);
             break;
-        case showLight:
+        case SHOWLIGHT:
             screen.print("Light: ");
             screen.print(light);
             break;
-        case showClock:
+        case SHOWCLOCK:
             screen.print("Time is now");
             break;
     }
@@ -150,29 +161,32 @@ void WeatherStation:: showCondtions(){
 //Constructors
 //The constructors for PowderStation works the same as the constructors for a WeatherStation
 PowderStation:: PowderStation():WeatherStation(){}
-PowderStation:: PowderStation(int lightPin, Button butt, String location): WeatherStation(int lightPin, Button butt, String location){}
+PowderStation:: PowderStation(int lightPin, Button butt, String location): WeatherStation(lightPin, butt, location){}
 
-void PowderStations:: start(){
+void PowderStation:: start(){
+    //Initalize lightsensorpin
+    pinMode(lightSensorPin, INPUT);
+
     //Set colour
-    setRGB(powderRed,powderGreen,powderBlue);
+    screen.setRGB(powderRed,powderGreen,powderBlue);
     
     //Print instructions
-    setCursor(0,0);
-    print(location);
-    setCursor(0,1);
-    print("PowderStation");
+    screen.setCursor(0,0);
+    screen.print(location);
+    screen.setCursor(0,1);
+    screen.print("PowderStation");
     delay(2000);
-    clear();
+    screen.clear();
 
-    setCursor(0,0);
-    print("Press button to");
-    setCursor(0,1);
-    print("start");
+    screen.setCursor(0,0);
+    screen.print("Press button to");
+    screen.setCursor(0,1);
+    screen.print("start");
     
     //Wait four user to press button
     while(button.getState() == 0){
-        button.setState(digitalRead(buttonPIN));
+        button.updateState(digitalRead(button.getPin()));
     }
     
-    clear();
-}
+    screen.clear();
+}

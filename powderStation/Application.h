@@ -26,10 +26,10 @@
 #define powderBlue 255
 
 //States for display of informations in the weather station
-#define showTemp 0
-#define showHum 1
-#define showLight 2
-#define showClock 3
+#define SHOWTEMP 0
+#define SHOWHUM 1
+#define SHOWLIGHT 2
+#define SHOWCLOCK 3
 
 /**
   * @class Application
@@ -50,9 +50,9 @@ class Button{
     int getPin(void);
 
     //Set attributes (Setters)
-    void changeState(int state);
     void changePin(int pin);
-    void updateOldState(int oldState);
+    void updateState(int state);
+    void updateOldState(void);
 
   private:
     //Attributes
@@ -63,6 +63,9 @@ class Button{
 
 class WeatherStation{
   public:
+    //Public attributes
+    Button button;
+
     WeatherStation(void);
     WeatherStation(int lightPin, Button butt, String location);
 
@@ -88,7 +91,6 @@ class WeatherStation{
     SHT31 tempHumSensor;
     int state;
     int lightSensorPin;
-    Button button;
     String location;
 
     //Condtions
