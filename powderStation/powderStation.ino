@@ -14,8 +14,8 @@
 
 //Wifi credentials
 //Elias's HotSpot
-//#define STASSID " Tche "
-//#define STAPSK "Elias123"
+// #define STASSID "Tche"
+// #define STAPSK "Elias123"
 //Haakon's Wifi
 //#define STASSID "devolo-278";
 //#define STAPSK "VBQCROOVXZYVUHMR";
@@ -25,6 +25,9 @@
 //Max HotSpot
 // #define STASSID "A Man"
 // #define STAPSK "HASNONAME"
+//Marthe HotSpot
+// #define STASSID "iPhone de Marthe C"
+// #define STAPSK "marthe31"
 
 //Values for optimal powder conditions
 #define minTemp4Powder -15
@@ -42,8 +45,15 @@ ESP8266WebServer server(80);
 // Variable to store the HTTP request
 String header;
 
+//Initialiser notre powderStation
+PowderStation thisStation;// = new PowderStation();
+
 void handleRoot() {
   String s = MAIN_page;
+
+  // s.replace("{{TEMP}}", String(thisStation.readTemp()));
+  // s.replace("{{LIGHT}}", String(thisStation.readLight()));
+  // s.replace("{{HUM}}", String(thisStation.readHum()));
 
   server.send(200, "text/html", s); //Send web page
 }
@@ -63,8 +73,11 @@ unsigned long previousTime = 0;
 // Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
 
+<<<<<<< HEAD
+=======
 // Create powderstation
 PowderStation thisStation;// = new PowderStation();
+>>>>>>> f21c638d3950e6fea2a01f068890d081156e8294
 
 void setup() {
   // Connect to network

@@ -195,15 +195,15 @@ const char MAIN_page[] PROGMEM = R"=====(
         </div>
         <div class="box">
             <h2>Temperature</h2>
-            <p>Brrrrrr, it's looking cold so it's about to snow</p>
+            <p>{{TEMP}} °C</p>
         </div>
         <div class="box">
             <h2>Light levels</h2>
-            <p>Sun is shining powders chiming</p>
+            <p>{{LIGHT}} lux</p>
         </div>
         <div class="box">
             <h2>Humidity</h2>
-            <p>I'm drooling just thinking about whats waiting today</p>
+            <p>{{HUM}} %</p>
         </div>
     </div>
 </body>
