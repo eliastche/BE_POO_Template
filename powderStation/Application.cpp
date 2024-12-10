@@ -79,8 +79,9 @@ WeatherStation:: WeatherStation(int lightPin, Button butt, String location){
 }
 
 void WeatherStation:: start(){
-    //Initalize lightsensorpin
+    //Initalize lightsensorpin and temperature and humidity sensor
     pinMode(lightSensorPin, INPUT);
+    tempHumSensor.begin();
 
     //Set colour
     screen.setRGB(weatherRed,weatherGreen,weatherBlue);
@@ -106,6 +107,16 @@ void WeatherStation:: start(){
     screen.clear();
 }
 
+void WeatherStation:: waitForNetwork(){
+  screen.setCursor(0,0);
+  screen.print("Waiting for");
+  screen.setCursor(0,1);
+  screen.print("network;)");
+}
+void WeatherStation:: clearScreen(){
+  screen.clear();
+}
+
 //Fetch attributes
 int WeatherStation:: readLight(){
     return light;
@@ -119,14 +130,18 @@ int WeatherStation:: readHum(){
 
 //Set attributes
 void WeatherStation:: changeState(){
-    if(state < SHOWCLOCK) state++;
-    else state = SHOWTEMP;
+    if(state < SHOWCLOCK){
+       state++;
+    }
+    else{
+      state = SHOWTEMP;
+    }
     screen.clear();
 }
 void WeatherStation:: updateConditions(){
     light = digitalRead(lightSensorPin);
-    temp = (int)tempHumSensor.getTemperature();
-    hum = (int)tempHumSensor.getHumidity();
+    temp = tempHumSensor.getTemperature();
+    hum = tempHumSensor.getHumidity();
 }
 
 //Print
@@ -166,6 +181,7 @@ PowderStation:: PowderStation(int lightPin, Button butt, String location): Weath
 void PowderStation:: start(){
     //Initalize lightsensorpin
     pinMode(lightSensorPin, INPUT);
+    tempHumSensor.begin();
 
     //Set colour
     screen.setRGB(powderRed,powderGreen,powderBlue);
@@ -189,4 +205,4 @@ void PowderStation:: start(){
     }
     
     screen.clear();
-}
+}

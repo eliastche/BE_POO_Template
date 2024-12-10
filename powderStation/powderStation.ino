@@ -68,11 +68,8 @@ const long timeoutTime = 2000;
 PowderStation thisStation;// = new PowderStation();
 
 void setup() {
-  //Intialiser notre bouton
-  //Button = new button(BUTTONPIN);
-
-  //Demarrer la station
-  thisStation.start();
+  // Connect to network
+  thisStation.waitForNetwork();
 
   Serial.begin(9600);
 
@@ -95,6 +92,12 @@ void setup() {
 
   server.begin();                  //Start server
   Serial.println("HTTP server started");
+
+  //clear screen
+  thisStation.clearScreen();
+
+  //Start the station
+  thisStation.start();
 }
 int temp;
 int hum;
