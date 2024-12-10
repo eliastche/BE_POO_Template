@@ -46,6 +46,10 @@ void handleRoot() {
 
   String s = MAIN_page;
 
+  s.replace("{{TEMP}}", String(thisStation.readTemp()));
+  s.replace("{{LIGHT}}", String(thisStation.readLight()));
+  s.replace("{{HUM}}", String(thisStation.readHum()));
+
   server.send(200, "text/html", s); //Send web page
 }
 
