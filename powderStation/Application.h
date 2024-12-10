@@ -177,7 +177,7 @@ const char MAIN_page[] PROGMEM = R"=====(
         </div>
         <div class="box">
             <h2>Temperature</h2>
-            <p>{{TEMP}} °C</p>
+            <p>{{TEMP}} C</p>
         </div>
         <div class="box">
             <h2>Light levels</h2>
