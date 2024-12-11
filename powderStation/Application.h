@@ -150,7 +150,25 @@ const char MAIN_page[] PROGMEM = R"=====(
 <head>
     <title>Powder Station</title>
     <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
-    <style>
+    <script>
+        // Function to fetch and update sensor data
+        function updateSensorData() {
+            fetch('/data') // Request sensor data from the server
+                .then(response => response.json()) // Parse the JSON response
+                .then(data => {
+                    // Update the HTML elements with new sensor values
+                    document.getElementById('temp').textContent = data.temp + " C";
+                    document.getElementById('light').textContent = data.light + " lux";
+                    document.getElementById('hum').textContent = data.hum + " %";
+                })
+                .catch(error => console.error('Error fetching sensor data:', error));
+        }
+
+        // Periodically update the data every 5 seconds
+        setInterval(updateSensorData, 5000);
+        window.onload = updateSensorData; // Fetch data immediately on page load
+    </script>
+    <<style>
         body, html{
             background-color: lightcyan;
             position: relative;
@@ -189,7 +207,7 @@ const char MAIN_page[] PROGMEM = R"=====(
             align-items: flex-start;
             justify-content: center;
         }
-    </style>
+    </style>>
 
 </head>
 <body>
@@ -197,19 +215,19 @@ const char MAIN_page[] PROGMEM = R"=====(
     <div class="grid">
         <div class="box">
             <h2>Time of day</h2>
-            <p>Woup woup! It's powder time!</p>
+            <p>Time to shread</p>
         </div>
         <div class="box">
             <h2>Temperature</h2>
-            <p>{{TEMP}} °C</p>
+            <p id="temp">Loading...SH</p>
         </div>
         <div class="box">
             <h2>Light levels</h2>
-            <p>{{LIGHT}} lux</p>
+            <p id="light">Loading...</p>
         </div>
         <div class="box">
             <h2>Humidity</h2>
-            <p>{{HUM}} %</p>
+            <p id="hum">Loading...</p>
         </div>
     </div>
 </body>

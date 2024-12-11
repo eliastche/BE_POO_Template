@@ -18,11 +18,11 @@
 // #define STASSID "Tche"
 // #define STAPSK "Elias123"
 //Haakon's Wifi
-#define STASSID "devolo-278";
-#define STAPSK "VBQCROOVXZYVUHMR";
+// #define STASSID "devolo-278";
+// #define STAPSK "VBQCROOVXZYVUHMR";
 //Haakon's HotSpot
-// #define STASSID "Halla man";
-// #define STAPSK "noe kult";
+#define STASSID "Halla man";
+#define STAPSK "noe kult";
 //Max HotSpot
 // #define STASSID "A Man"
 // #define STAPSK "HASNONAME"
