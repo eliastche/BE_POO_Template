@@ -46,11 +46,19 @@ PowderStation thisStation;
 void handleRoot() {
   String s = MAIN_page;
 
-  // s.replace("{{TEMP}}", String(thisStation.readTemp()));
-  // s.replace("{{LIGHT}}", String(thisStation.readLight()));
-  // s.replace("{{HUM}}", String(thisStation.readHum()));
-
   server.send(200, "text/html", s); //Send web page
+}
+
+// Prepare a JSON response with sensor data
+void handleSensorData() {
+    String json = "{";
+    json += "\"temp\":" + String(thisStation.readTemp()) + ",";
+    json += "\"light\":" + String(thisStation.readLight()) + ",";
+    json += "\"hum\":" + String(thisStation.readHum());
+    json += "}";
+
+    // Send the JSON response
+    server.send(200, "application/json", json);
 }
 
 // Auxiliar variables to store the current output state
@@ -90,6 +98,7 @@ void setup() {
   server.begin();
 
   server.on("/", handleRoot);      //Which routine to handle at root location
+  server.on("/data", handleSensorData); // Serve sensor data as JSON
 
   server.begin();                  //Start server
   Serial.println("HTTP server started");
