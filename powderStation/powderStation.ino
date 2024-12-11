@@ -23,12 +23,7 @@
 //Haakon's HotSpot
 #define STASSID "Halla man";
 #define STAPSK "noe kult";
-//Max HotSpot
-// #define STASSID "A Man"
-// #define STAPSK "HASNONAME"
-//Marthe HotSpot
-// #define STASSID "iPhone de Marthe C"
-// #define STAPSK "marthe31"
+
 
 // Network credentials
 const char* ssid     = STASSID;
