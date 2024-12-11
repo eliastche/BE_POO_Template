@@ -41,7 +41,7 @@ ESP8266WebServer server(80);
 String header;
 
 //Initialiser notre powderStation
-PowderStation thisStation;// = new PowderStation();
+PowderStation thisStation;
 
 void handleRoot() {
   String s = MAIN_page;
